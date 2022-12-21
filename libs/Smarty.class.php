@@ -655,6 +655,10 @@ class Smarty extends Smarty_Internal_TemplateBase
      */
     private $isMutingUndefinedOrNullWarnings = false;
 
+    //Vasya
+    public $oParrent;
+    // /Vasya
+
     /**
      * Initialize new Smarty object
      */

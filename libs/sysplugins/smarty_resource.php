@@ -257,4 +257,14 @@ abstract class Smarty_Resource
     {
         return true;
     }
+
+    //Vasya
+    /**
+     * @return bool
+     */
+    public function checkTplChanged($name)
+    {
+        return false;
+    }
+    // /Vasya
 }

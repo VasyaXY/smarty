@@ -17,6 +17,10 @@
  */
 class Smarty_Internal_Resource_File extends Smarty_Resource
 {
+    // Vasya
+    private $_times = [];
+    // /Vasya
+
     /**
      * populate Source Object with meta data from Resource
      *

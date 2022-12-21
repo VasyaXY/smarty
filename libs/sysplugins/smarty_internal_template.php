@@ -211,7 +211,10 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
             }
             $this->cached->render($this, $no_output_filter);
         } else {
-            if (!isset($this->compiled) || $this->compiled->compile_id !== $this->compile_id) {
+// Vasya
+            if (!isset($this->compiled) || $this->compiled->compile_id !== $this->compile_id  || $this->source->handler->checkTplChanged($this->source->name)) {
+                $this->compiled->process($this);
+// Vasya
                 $this->loadCompiled(true);
             }
             $this->compiled->render($this);
@@ -294,8 +297,15 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         $_templateId = $smarty->_getTemplateId($template, $cache_id, $compile_id, $caching, $tpl);
         // recursive call ?
         if ((isset($tpl->templateId) ? $tpl->templateId : $tpl->_getTemplateId()) !== $_templateId) {
+// Vasya
             // already in template cache?
-            if (isset(self::$tplObjCache[ $_templateId ])) {
+            if (isset(self::$tplObjCache[ $_templateId ]))
+                $tt = self::$tplObjCache[ $_templateId ]->source->handler->checkTplChanged(self::$tplObjCache[ $_templateId ]->source->name);
+            else
+                $tt = false;
+            // already in template cache?
+            if (isset(self::$tplObjCache[ $_templateId ]) && !$tt) {
+// /Vasya
                 // copy data from cached object
                 $cachedTpl = &self::$tplObjCache[ $_templateId ];
                 $tpl->templateId = $cachedTpl->templateId;
@@ -333,6 +343,16 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
                 if ($caching !== 9999) {
                     unset($tpl->cached);
                 }
+
+                // Vasya
+                if ($tt)
+                {
+                    $tpl->source->handler->recompiled = false;
+                    $forceTplCache = true;
+                    unset(self::$tplObjCache[ $tpl->templateId ]);
+                }
+                // /Vasya
+
             }
         } else {
             // on recursive calls force caching
