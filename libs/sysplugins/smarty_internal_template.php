@@ -379,7 +379,7 @@ class Smarty_Internal_Template extends Smarty_Internal_TemplateBase
         }
         if ($tpl->caching === 9999) {
             if (!isset($tpl->compiled)) {
-                $tpl->loadCompiled(true);
+                $this->loadCompiled(true);
             }
             if ($tpl->compiled->has_nocache_code) {
                 $this->cached->hashes[ $tpl->compiled->nocache_hash ] = true;
